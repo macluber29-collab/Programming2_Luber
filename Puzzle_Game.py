@@ -1,27 +1,37 @@
 import random
-#player = {"hp": 20, "attack": 3, "defense": 0.5, "speed": 10}
-#enemies = {
-#}
+import time
 
+player = [20, 20, 10, 3, 1.5]
 
 
 backpack = []
 weight_limit = 32
 xp = 0
 xp_limit = 32
+
+def make_enemy(name, mult, bst):
+    bsm = mult*bst
+    if name == "skeleton":
+        bsh = 0.3*bsm
+        bsa = 0.4*bsm
+        bsd = 0.2*bsm
+        bss = 0.1*bsm
+        return [bsh, bsh, bsa, bsd, bss]
+
 def make_item(name, mult, bst):
-    bss = mult*bst
+    bsm = mult*bst
     if name == "sword":
-        bsa = bss
+        bsa = bsm
         return ("sword", 8, bsa, "slash")
     if name == "shield":
-        bsd = 0.8*bss
-        bsa = 0.2*bss
+        bsd = 0.8*bsm
+        bsa = 0.2*bsm
         return("shield", 12, bsa, bsd, "shield bash")
 #sword1 = make_item("sword", 0.7, 13)
 #shield1 = make_item("shield", 2.5, 13)
 lighter = ("lighter", 0.5)
-backpack.insert(lighter, 0)
+backpack.insert(0, lighter)
+
 
 
 
@@ -73,3 +83,33 @@ skeleton_art = r"""@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%+###+-:+*##%#*#******++++*+++*++***=+--*#****##++@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"""
+
+if 3 == 3:
+    #random choice from item list
+    item = make_item("sword", 0.1, 10)
+    print(sword_art)
+    time.sleep(1)
+    print("You aquired sword!")
+    time.sleep(0.5)
+    print("Sword was added to your backpack.")
+    backpack.insert(1, item)
+
+
+if 3 == 3:
+    #Make this random choice out of enemy list
+    enemy = make_enemy("skeleton", 1, 12)
+#    print(skeleton_art)
+    print("You have encountered skeleton!")
+    print(enemy)
+    time.sleep(0.5)
+while player[0] > 0 and enemy[0] > 0:
+    wtdchoice = input("Would you like to: \n Attack \n Use Item \n Run \n ").strip().lower()
+    if wtdchoice == "attack":
+        atchoice = input(f"Attacks: \n {backpack[1][-1]} \n").strip().lower()
+        if atchoice == "slash":
+            randomint = random.randint(5, 15)
+            print(enemy[0])
+            enemy[0] = enemy[0] - backpack[1][2]
+            print(enemy[0])
+        if enemy[0] <= enemy[1]*0.5:
+            print("The skeleton's bones crack.")
