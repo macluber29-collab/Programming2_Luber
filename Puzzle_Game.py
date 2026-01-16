@@ -2,22 +2,27 @@ import random
 #player = {"hp": 20, "attack": 3, "defense": 0.5, "speed": 10}
 #enemies = {
 #}
-#item_dic = {
-#    lighter = {
-#        "name": "lighter"
-#        "weight": 0.5
-#        "attack": 0
-#        "defense": 0
-#    }
-#}
+
+
 
 backpack = []
 weight_limit = 32
 xp = 0
 xp_limit = 32
-def calculator(num1, num2):
-    sum = num1 + num2
-    return sum
+def make_item(name, mult, bst):
+    bss = mult*bst
+    if name == "sword":
+        bsa = bss
+        return ("sword", 8, bsa, "slash")
+    if name == "shield":
+        bsd = 0.8*bss
+        bsa = 0.2*bss
+        return("shield", 12, bsa, bsd, "shield bash")
+#sword1 = make_item("sword", 0.7, 13)
+#shield1 = make_item("shield", 2.5, 13)
+lighter = ("lighter", 0.5)
+backpack.insert(lighter, 0)
+
 
 
 sword_art = r"""
@@ -68,4 +73,3 @@ skeleton_art = r"""@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%+###+-:+*##%#*#******++++*+++*++***=+--*#****##++@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"""
-print(backpack)
