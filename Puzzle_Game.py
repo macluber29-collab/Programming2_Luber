@@ -16,17 +16,17 @@ def make_enemy(name, mult, bst):
         bsa = 0.4*bsm
         bsd = 0.2*bsm
         bss = 0.1*bsm
-        return [bsh, bsh, bsa, bsd, bss]
+        return [bsh, bsh, bsa, bsd, bss, "skeleton"]
 
 def make_item(name, mult, bst):
     bsm = mult*bst
     if name == "sword":
         bsa = bsm
-        return ("sword", 8, bsa, "slash")
+        return ("slash", 8, bsa, "sword")
     if name == "shield":
         bsd = 0.8*bsm
         bsa = 0.2*bsm
-        return("shield", 12, bsa, bsd, "shield bash")
+        return("shield bash", 12, bsa, bsd, "shield")
 #sword1 = make_item("sword", 0.7, 13)
 #shield1 = make_item("shield", 2.5, 13)
 lighter = ("lighter", 0.5)
@@ -94,14 +94,16 @@ if 3 == 3:
     print("Sword was added to your backpack.")
     backpack.insert(1, item)
 
-
+#Change everywhere it says skeleton to enemey[-1]
 if 3 == 3:
     #Make this random choice out of enemy list
     enemy = make_enemy("skeleton", 1, 12)
-#    print(skeleton_art)
+    print(skeleton_art)
+    time.sleep(2)
     print("You have encountered skeleton!")
-    print(enemy)
+#    print(enemy)
     time.sleep(0.5)
+
 while player[0] > 0 and enemy[0] > 0:
     wtdchoice = input("Would you like to: \n Attack \n Use Item \n Run \n ").strip().lower()
     if wtdchoice == "attack":
@@ -113,3 +115,9 @@ while player[0] > 0 and enemy[0] > 0:
             print(enemy[0])
         if enemy[0] <= enemy[1]*0.5:
             print("The skeleton's bones crack.")
+    #ifs for items, run
+    player[0] = player[0] - enemy[2]
+    print("The skeleton attacked")
+    print(f"You now have {enemy[0]} health.")
+if enemy[0] >= 0:
+    print(f"You defeated {enemy[-1]}!")
