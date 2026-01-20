@@ -107,7 +107,7 @@ if 3 == 3:
 while player[0] > 0 and enemy[0] > 0:
     wtdchoice = input("Would you like to: \n Attack \n Use Item \n Run \n ").strip().lower()
     if wtdchoice == "attack":
-        atchoice = input(f"Attacks: \n {backpack[1][-1]} \n").strip().lower()
+        atchoice = input(f"Attacks: \n {backpack[1][0]} \n").strip().lower()
         if atchoice == "slash":
             randomint = random.randint(5, 15)
             print(enemy[0])
@@ -118,6 +118,6 @@ while player[0] > 0 and enemy[0] > 0:
     #ifs for items, run
     player[0] = player[0] - enemy[2]
     print("The skeleton attacked")
-    print(f"You now have {enemy[0]} health.")
+    print(f"You now have {player[0]} health.")
 if enemy[0] >= 0:
     print(f"You defeated {enemy[-1]}!")
