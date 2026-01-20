@@ -110,14 +110,14 @@ while player[0] > 0 and enemy[0] > 0:
         atchoice = input(f"Attacks: \n {backpack[1][0]} \n").strip().lower()
         if atchoice == "slash":
             randomint = random.randint(5, 15)
-            print(enemy[0])
+#            print(enemy[0])
             enemy[0] = enemy[0] - backpack[1][2]
-            print(enemy[0])
+#            print(enemy[0])
         if enemy[0] <= enemy[1]*0.5:
             print("The skeleton's bones crack.")
     #ifs for items, run
     player[0] = player[0] - enemy[2]
-    print("The skeleton attacked")
+    print(f"The {enemy[-1]} attacked")
     print(f"You now have {player[0]} health.")
 if enemy[0] >= 0:
     print(f"You defeated {enemy[-1]}!")
