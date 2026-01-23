@@ -9,14 +9,24 @@ class Entity:
         self.size = size
         self.race = race
         self.strength = strength
+   
     def level_up(self):
-        requirement += (self.level * 2)
-        if self.xp >= requirement:
+        requirement = self.level * 2
+        while self.xp >= requirement:
+            requirement = self.level*2
             self.level += 1
+            print("You leveled up!")
+
     def take_damage(self, amount):
         self.health -= amount
         if self.health <= 0:
             return "{self.race} died!"
+   
+    def xpgain(self, mult):
+        gain = random.randint(1,5)
+        gain = gain * 1.3 * mult
+        self.xp += gain
+    
     def describe(self):
         return f"You see a {self.race} that is {self.size} and has {self.strength} strength and is level {self.level} and has {self.health} hp"
 
@@ -29,17 +39,17 @@ class Weapon:
         self.rarity = rarity
         self.special = special
     #Things that happen when attack
-    def attack(self):
+    
+    def attack(self, target):
+        target = target.health
         if self.durability > 0:
+            target -= self.damage
             self.durability -= 1
             print(f" {self.name} has {self.durability} durability remaining")
             if self.durability <=0:
                 return f"{self.name} broke!"
-            return self.damage
-    def xpgain(self, enl):
-        num = random.randint(1,5)
-        num = num * 1.3 * enl
-        return num
+            return target
+
 
 
 
@@ -53,20 +63,31 @@ class main():
     nubian_goat = Entity(15, 1, 0, "tiny", "Goat", 1)
     kicking_boots = Weapon("Kicking Boots", 15, 10, "10000", "mythical", "roundhouse")
     hooves = Weapon("Hooves", 1, 15, "tiny", "common", "ram")
+
 #    print(f"Behold your mighty hero!!! {hero.describe()}")
 #    print(f"{nubian_goat.describe()}")
-    print(f"Goat uses with {hooves.special}")
-    tempatt = hooves.attack()
-    print(f"{nubian_goat.race} dealt {tempatt} damage!.")
-    hero.take_damage(tempatt)
+
+    print(f"Goat uses {hooves.special}")
+    hooves.attack(hero)
+    
+    #print(f"{nubian_goat.race} dealt {tempatt} damage!.")
+
+    #hero.take_damage(tempatt)
     print(f"You now have {hero.health} hp. ")
+
     print(f"You use with {kicking_boots.special}.")
-    tempatt = kicking_boots.attack()
+    tempatt = kicking_boots.attack(nubian_goat)
     print(f"You dealt {tempatt} damage!")
+
     nubian_goat.take_damage(tempatt)
     print(f"{nubian_goat.race} now has {nubian_goat.health} hp")
+
     if nubian_goat.health <= 0:
-        pass
+        hero.xpgain(1)
+        hero.level_up()
+        print(hero.xp)
+        print(hero.level)
+        print(f"You are now level {hero.level}")
         
 
 
