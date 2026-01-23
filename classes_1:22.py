@@ -31,11 +31,14 @@ class Weapon:
     def attack(self):
         if self.durability > 0:
             self.durability -= 1
+            print(f" Weapon has {self.durability} durability remaining")
             if self.durability <=0:
                 return "Weapon broke!"
             return self.damage
     def xpgain(self, enl):
         num = random.randint(1,5)
+        num = num * 1.3 * enl
+        return num
 
 
 
@@ -45,7 +48,7 @@ class Weapon:
 
 class main():
     
-    hero = Entity(20, 1, 0, "large", "Human", 1)
+    hero = Entity(20, 1, 0, "large", "You", 1)
     nubian_goat = Entity(15, 1, 0, "tiny", "Goat", 1)
     kicking_boots = Weapon(15, 10, "10000", "mythical", "roundhouse")
     hooves = Weapon(1, 15, "tiny", "common", "ram")
@@ -61,6 +64,8 @@ class main():
     print(f"You dealt {tempatt} damage!")
     nubian_goat.take_damage(tempatt)
     print(f"{nubian_goat.race} now has {nubian_goat.health} hp")
+    if nubian_goat.health <= 0:
+        
 
 
 if __name__ == "__main__":
