@@ -21,7 +21,8 @@ class Entity:
         return f"You see a {self.race} that is {self.size} and has {self.strength} strength and is level {self.level} and has {self.health} hp"
 
 class Weapon:
-    def __init__(self, damage, durability, size, rarity, special):
+    def __init__(self, name, damage, durability, size, rarity, special):
+        self.name = name
         self.damage = damage
         self.durability = durability
         self.size = size
@@ -31,9 +32,9 @@ class Weapon:
     def attack(self):
         if self.durability > 0:
             self.durability -= 1
-            print(f" Weapon has {self.durability} durability remaining")
+            print(f" {self.name} has {self.durability} durability remaining")
             if self.durability <=0:
-                return "Weapon broke!"
+                return f"{self.name} broke!"
             return self.damage
     def xpgain(self, enl):
         num = random.randint(1,5)
@@ -50,8 +51,8 @@ class main():
     
     hero = Entity(20, 1, 0, "large", "You", 1)
     nubian_goat = Entity(15, 1, 0, "tiny", "Goat", 1)
-    kicking_boots = Weapon(15, 10, "10000", "mythical", "roundhouse")
-    hooves = Weapon(1, 15, "tiny", "common", "ram")
+    kicking_boots = Weapon("Kicking Boots", 15, 10, "10000", "mythical", "roundhouse")
+    hooves = Weapon("Hooves", 1, 15, "tiny", "common", "ram")
 #    print(f"Behold your mighty hero!!! {hero.describe()}")
 #    print(f"{nubian_goat.describe()}")
     print(f"Goat uses with {hooves.special}")
@@ -65,6 +66,7 @@ class main():
     nubian_goat.take_damage(tempatt)
     print(f"{nubian_goat.race} now has {nubian_goat.health} hp")
     if nubian_goat.health <= 0:
+        pass
         
 
 
