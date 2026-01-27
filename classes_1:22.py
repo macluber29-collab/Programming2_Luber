@@ -1,4 +1,5 @@
 import random
+import time
 
 #class 1
 class Entity:
@@ -10,25 +11,40 @@ class Entity:
         self.race = race
         self.strength = strength
    
-    def level_up(self):
+    def xpgain(self, mult):
+        gain = random.randint(1,3)
+        gain = gain * ((mult/100)+2)
+        self.xp += gain
         requirement = self.level * 2
         while self.xp >= requirement:
-            requirement = self.level*2
             self.level += 1
-            print("You leveled up!")
+            print(f"You leveled up to level {self.level}")
+            requirement = self.level*2
 
     def take_damage(self, amount):
         self.health -= amount
+        print(f"{self.race} now has {self.health} hp.")
         if self.health <= 0:
             return "{self.race} died!"
-   
-    def xpgain(self, mult):
-        gain = random.randint(1,5)
-        gain = gain * 1.3 * mult
-        self.xp += gain
+
+
     
     def describe(self):
         return f"You see a {self.race} that is {self.size} and has {self.strength} strength and is level {self.level} and has {self.health} hp"
+
+    def attack(self, weapon, target):
+        print(f"{self.race} attacks {target.race} with {weapon.name}.")
+
+        total_damage = weapon.damage + self.strength
+
+        target.take_damage(total_damage)
+
+        weapon.degrade()
+
+        if target.health <= 0:
+            print(f"You killed {target.race}!")
+            self.xpgain(2)
+
 
 class Weapon:
     def __init__(self, name, damage, durability, size, rarity, special):
@@ -38,18 +54,14 @@ class Weapon:
         self.size = size
         self.rarity = rarity
         self.special = special
-    #Things that happen when attack
-    
-    def attack(self, target):
-        target = target.health
-        if self.durability > 0:
-            target -= self.damage
-            self.durability -= 1
-            print(f" {self.name} has {self.durability} durability remaining")
-            if self.durability <=0:
-                return f"{self.name} broke!"
-            return target
 
+
+    def degrade(self):
+        if self.durability > 0:
+            self.durability -= 1
+            print(f"{self.name} durability: {self.durability}")
+            if self.durability <= 0:
+                print(f"{self.name} broke!")
 
 
 
@@ -59,36 +71,18 @@ class Weapon:
 
 class main():
     
-    hero = Entity(20, 1, 0, "large", "You", 1)
-    nubian_goat = Entity(15, 1, 0, "tiny", "Goat", 1)
+    hero = Entity(20, 1, 0, "large", "Hero", 1)
+    enemy = Entity(15, 1, 0, "tiny", "Goat", 1)
     kicking_boots = Weapon("Kicking Boots", 15, 10, "10000", "mythical", "roundhouse")
     hooves = Weapon("Hooves", 1, 15, "tiny", "common", "ram")
 
-#    print(f"Behold your mighty hero!!! {hero.describe()}")
-#    print(f"{nubian_goat.describe()}")
+    print(f"Behold your mighty hero!!! {hero.describe()}")
+    print(f"{enemy.describe()}")
+   
+    enemy.attack(hooves, hero)
 
-    print(f"Goat uses {hooves.special}")
-    hooves.attack(hero)
-    
-    #print(f"{nubian_goat.race} dealt {tempatt} damage!.")
+    hero.attack(kicking_boots, enemy)
 
-    #hero.take_damage(tempatt)
-    print(f"You now have {hero.health} hp. ")
-
-    print(f"You use with {kicking_boots.special}.")
-    tempatt = kicking_boots.attack(nubian_goat)
-    print(f"You dealt {tempatt} damage!")
-
-    nubian_goat.take_damage(tempatt)
-    print(f"{nubian_goat.race} now has {nubian_goat.health} hp")
-
-    if nubian_goat.health <= 0:
-        hero.xpgain(1)
-        hero.level_up()
-        print(hero.xp)
-        print(hero.level)
-        print(f"You are now level {hero.level}")
-        
 
 
 if __name__ == "__main__":
