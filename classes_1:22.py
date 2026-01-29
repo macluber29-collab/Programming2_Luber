@@ -1,6 +1,11 @@
 import random
 import time
 
+weaponlist = ["Kicking Boots", "Dagger", "Longsword"]
+potlist = ["Potion of Healing", "Potion of Swiftness", "Potion of Strength", "Potion of Luck"]
+backpack = []
+
+
 #class 1
 class Entity:
     def __init__(self, health, level, xp, size, race, strength):
@@ -26,8 +31,6 @@ class Entity:
         print(f"{self.race} now has {self.health} hp.")
         if self.health <= 0:
             return "{self.race} died!"
-
-
     
     def describe(self):
         return f"You see a {self.race} that is {self.size} and has {self.strength} strength and is level {self.level} and has {self.health} hp"
@@ -44,6 +47,14 @@ class Entity:
         if target.health <= 0:
             print(f"You killed {target.race}!")
             self.xpgain(2)
+
+    def encounter(self, level):
+        roll = random.randint(1,100)
+        if roll <= 10:
+            addition = random.choice(weaponlist)
+
+
+
 
 
 class Weapon:
@@ -74,6 +85,9 @@ class main():
     hero = Entity(20, 1, 0, "large", "Hero", 1)
     enemy = Entity(15, 1, 0, "tiny", "Goat", 1)
     kicking_boots = Weapon("Kicking Boots", 15, 10, "10000", "mythical", "roundhouse")
+    backpack.append(kicking_boots)
+    for i in range(len(backpack)):
+        print(backpack[0].name)
     hooves = Weapon("Hooves", 1, 15, "tiny", "common", "ram")
 
     print(f"Behold your mighty hero!!! {hero.describe()}")
