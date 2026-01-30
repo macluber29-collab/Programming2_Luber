@@ -1,36 +1,11 @@
 import random
 import time
 
-player = [20, 20, 10, 3, 1.5]
 
 
 backpack = []
 weight_limit = 32
-xp = 0
-xp_limit = 32
 
-def make_enemy(name, mult, bst):
-    bsm = mult*bst
-    if name == "skeleton":
-        bsh = 0.3*bsm
-        bsa = 0.4*bsm
-        bsd = 0.2*bsm
-        bss = 0.1*bsm
-        return [bsh, bsh, bsa, bsd, bss, "skeleton"]
-
-def make_item(name, mult, bst):
-    bsm = mult*bst
-    if name == "sword":
-        bsa = bsm
-        return ("slash", 8, bsa, "sword")
-    if name == "shield":
-        bsd = 0.8*bsm
-        bsa = 0.2*bsm
-        return("shield bash", 12, bsa, bsd, "shield")
-#sword1 = make_item("sword", 0.7, 13)
-#shield1 = make_item("shield", 2.5, 13)
-lighter = ("lighter", 0.5)
-backpack.insert(0, lighter)
 
 
 
