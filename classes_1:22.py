@@ -25,6 +25,7 @@ class Entity:
             self.level += 1
             print(f"You leveled up to level {self.level}")
             requirement = self.level*2
+        print(f"You now have {self.xp} xp.")
 
     def take_damage(self, amount):
         self.health -= amount
