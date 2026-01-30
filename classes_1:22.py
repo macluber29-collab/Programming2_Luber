@@ -2,7 +2,7 @@ import random
 import time
 
 weaponlist = ["Kicking Boots", "Dagger", "Longsword"]
-potlist = ["Potion of Healing", "Potion of Swiftness", "Potion of Strength", "Potion of Luck"]
+potlist = ["Potion of Healing", "Potion of Strength"]
 
 
 #class 1
@@ -14,7 +14,6 @@ class Inventory:
     
     def add_item(self,item):
         self.items.append(item)
-        print(f"added {item.name} to inventory.")
     
     def remove_item(self, item):
         if item in self.items:
@@ -61,17 +60,20 @@ class Entity:
         return f"You see a {self.race} that is {self.size} and has {self.strength} strength and is level {self.level} and has {self.health} hp"
 
     def attack(self, weapon, target):
-        print(f"{self.race} attacks {target.race} with {weapon.name}.")
+        if weapon in self.inventory.items:
+            print(f"{self.race} attacks {target.race} with {weapon.name}.")
 
-        total_damage = weapon.damage + self.strength
+            total_damage = weapon.damage + self.strength
 
-        target.take_damage(total_damage)
+            target.take_damage(total_damage)
 
-        weapon.degrade(self.inventory)
+            weapon.degrade(self.inventory)
 
-        if target.health <= 0:
-            print(f"You killed {target.race}!")
-            self.xpgain(2)
+            if target.health <= 0:
+                print(f"You killed {target.race}!")
+                self.xpgain(2)
+        else:
+            print("Weapon not in inventory")
     def add_weapon_to_inventory(self,weapon):
         self.inventory.add_item(weapon)
         print(f"{self.race} equips {weapon.name}.")
@@ -119,6 +121,10 @@ class main():
     kicking_boots = Weapon("Kicking Boots", 15, 10, "10000", "mythical", "roundhouse")
     hooves = Weapon("Hooves", 1, 15, "tiny", "common", "ram")
     hero.add_weapon_to_inventory(kicking_boots)
+    enemy.add_weapon_to_inventory(hooves)
+#    print(enemy.inventory.items[0].name)
+#   print(hero.inventory.items[0].name)
+
 
     print(f"Behold your mighty hero!!! {hero.describe()}")
     print(f"{enemy.describe()}")
