@@ -38,6 +38,14 @@ class Entity:
         self.strength = strength
         self.inventory = Inventory()
    
+
+    def potion_use(self, potion):
+        if potion == "Potion of Healing":
+            self.hp += self.level * 3/2
+        if potion == "Potion of Strength":
+            self.strength += self.level * 1/2
+
+
     def xpgain(self, mult):
         gain = random.randint(1,3)
         gain = gain * ((mult/100)+2)
@@ -50,14 +58,17 @@ class Entity:
             round(self.xp)
         print(f"You now have {self.xp} xp out of {requirement} xp required for level {self.level + 1}")
 
+
     def take_damage(self, amount):
         self.health -= amount
         print(f"{self.race} now has {self.health} hp.")
         if self.health <= 0:
             return "{self.race} died!"
     
+
     def describe(self):
         return f"You see a {self.race} that is {self.size} and has {self.strength} strength and is level {self.level} and has {self.health} hp"
+
 
     def attack(self, weapon, target):
         if weapon in self.inventory.items:
@@ -74,6 +85,8 @@ class Entity:
                 self.xpgain(2)
         else:
             print("Weapon not in inventory")
+
+
     def add_weapon_to_inventory(self,weapon):
         self.inventory.add_item(weapon)
         print(f"{self.race} equips {weapon.name}.")
@@ -81,6 +94,7 @@ class Entity:
     def remove_weapon_from_inventory(self,weapon):
         self.inventory.remove_item(weapon)
         print(f"{self.race} unequips {weapon.name}.")
+
 
     def encounter(self, level):
         roll = random.randint(1,100)
