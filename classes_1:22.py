@@ -1,9 +1,13 @@
 import random
 import time
 
+rarlist = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"]
+
+speclist = ["Roundhouse", "Low Stab", "Spinjitzu"]
 weaponlist = ["Kicking Boots", "Dagger", "Longsword"]
 potlist = ["Potion of Healing", "Potion of Strength"]
 
+roll = random.randint(1,100)
 
 #class 1
 class Inventory:
@@ -96,21 +100,22 @@ class Entity:
         print(f"{self.race} unequips {weapon.name}.")
 
 
-    def encounter(self, level):
-        roll = random.randint(1,100)
-        if roll <= 10:
+    def encounter(self):
+        if roll <= 20:
             addition = random.choice(weaponlist)
-
-
+            addition = Weapon(addition, self.level * 2, roll, random.choice(rarlist), speclist[weaponlist.index(addition)])
+            print(f"You found {addition.name}: \n - {addition.damage} damage \n - {addition.durability} durability \n - {addition.rarity} \n - Special Ability: {addition.special} ")
+            decision = input("Do you want to add the weapon to inventory? ").strip().lower()
+            if decision == "yes":
+                self.inventory.items.append(addition)
 
 
 
 class Weapon:
-    def __init__(self, name, damage, durability, size, rarity, special):
+    def __init__(self, name, damage, durability, rarity, special):
         self.name = name
         self.damage = damage
         self.durability = durability
-        self.size = size
         self.rarity = rarity
         self.special = special
 
@@ -132,16 +137,16 @@ class main():
     
     hero = Entity(20, 1, 0, "large", "Hero", 1)
     enemy = Entity(15, 1, 0, "tiny", "Goat", 1)
-    kicking_boots = Weapon("Kicking Boots", 15, 10, "10000", "mythical", "roundhouse")
-    hooves = Weapon("Hooves", 1, 15, "tiny", "common", "ram")
+    kicking_boots = Weapon("Kicking Boots", 15, 10, "mythical", "roundhouse")
+    hooves = Weapon("Hooves", 1, 15, "common", "ram")
     hero.add_weapon_to_inventory(kicking_boots)
     enemy.add_weapon_to_inventory(hooves)
 #    print(enemy.inventory.items[0].name)
 #   print(hero.inventory.items[0].name)
-
-
-    print(f"Behold your mighty hero!!! {hero.describe()}")
-    print(f"{enemy.describe()}")
+    print(roll)
+    hero.encounter()
+    #print(f"Behold your mighty hero!!! {hero.describe()}")
+    #print(f"{enemy.describe()}")
    
     enemy.attack(hooves, hero)
 
