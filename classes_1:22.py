@@ -25,6 +25,7 @@ class Inventory:
             print(f"Remove {item.name} from inventory.")
         else:
             print(f"{item.name} not found in inventory.")
+
     def display_inventory(self):
         if self.items:
             print("Inventory: ")
@@ -44,10 +45,11 @@ class Entity:
    
 
     def potion_use(self, potion):
-        if potion == "Potion of Healing":
-            self.hp += self.level * 3/2
-        if potion == "Potion of Strength":
-            self.strength += self.level * 1/2
+        if potion in self.inventory.items:
+            if potion == "Potion of Healing":
+                self.hp += self.level * 3/2
+            if potion == "Potion of Strength":
+              self.strength += self.level * 1/2
 
 
     def xpgain(self, mult):
@@ -108,7 +110,25 @@ class Entity:
             decision = input("Do you want to add the weapon to inventory? ").strip().lower()
             if decision == "yes":
                 self.inventory.items.append(addition)
-
+                print("Weapon added to inventory.")
+            else:
+                print("Weapon not added to inventory.")
+        elif roll <= 40:
+            addition = random.choice(potlist)
+            if addition == "Potion of Healing":
+                decision = input("You have found a potion of healing(Heals you based on your level)! Would you like to add it to your inventory?").strip().lower()
+                if decision == "yes":
+                    self.inventory.items.append(addition)
+                    print("Potion added to inventory.")
+                else:
+                    print("Potion not added to inventory.")
+            if addition == "Potion of Strength":
+                decision = input("You have found a potion of healing(Heals you based on your level)! Would you like to add it to your inventory?").strip().lower()
+                if decision == "yes":
+                    self.inventory.items.append(addition)
+                    print("Potion added to inventory.")
+                else:
+                    print("Potion not added to inventory.")
 
 
 class Weapon:
@@ -134,7 +154,6 @@ class Weapon:
 
 
 class main():
-    
     hero = Entity(20, 1, 0, "large", "Hero", 1)
     enemy = Entity(15, 1, 0, "tiny", "Goat", 1)
     kicking_boots = Weapon("Kicking Boots", 15, 10, "mythical", "roundhouse")
@@ -143,8 +162,12 @@ class main():
     enemy.add_weapon_to_inventory(hooves)
 #    print(enemy.inventory.items[0].name)
 #   print(hero.inventory.items[0].name)
+
     print(roll)
     hero.encounter()
+
+    hero.inventory.display_inventory()
+
     #print(f"Behold your mighty hero!!! {hero.describe()}")
     #print(f"{enemy.describe()}")
    
