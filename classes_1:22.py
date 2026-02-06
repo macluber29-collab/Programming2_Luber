@@ -1,6 +1,7 @@
 import random
 import time
 
+
 rarlist = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"]
 
 speclist = ["Roundhouse", "Low Stab", "Spinjitzu"]
@@ -22,15 +23,20 @@ class Inventory:
     def remove_item(self, item):
         if item in self.items:
             self.items.remove(item)
-            print(f"Remove {item.name} from inventory.")
+            print(f"Removed {item.name} from inventory.")
         else:
             print(f"{item.name} not found in inventory.")
 
     def display_inventory(self):
         if self.items:
+            counter = 0
             print("Inventory: ")
             for item in self.items:
-                print(f"- {item.name}")
+                counter += 1
+                if item.name in weaponlist:
+                    print(f"{str(counter)}. {item.name}: {item.damage} damage, {item.durability} durability")
+                if item.name in potlist:
+                    print(f"{str(counter)}. {item.name}")
         else:
             print(f"Inventory is empty.")
 class Entity:
@@ -45,12 +51,32 @@ class Entity:
    
 
     def potion_use(self, potion):
+        print(potion)
         if potion in self.inventory.items:
-            if potion == "Potion of Healing":
-                self.hp += self.level * 3/2
-            if potion == "Potion of Strength":
+            if potion.name == "Potion of Healing":
+                self.health += self.level * 3/2
+                print(f"You used potion of healing. Hero now has {self.health} hp.")
+                self.inventory.remove_item(potion)
+            if potion.name == "Potion of Strength":
               self.strength += self.level * 1/2
+              print(f"You used Potion of Strength. You now have {self.strength} strength.")
+              self.inventory.remove_item(potion)
+        else:
+            print("Potion not in inventory")
 
+    def choice(self, enemy):
+        #Add more
+        self.inventory.display_inventory()
+        choice = input("What would you like to do: \n 1: Attack \n 2: Use Potion \n").strip().lower()
+        if choice == "1":
+            wepchoice = input("What weapon would you like to attack with? ").strip().lower()
+            self.attack(self.inventory.items[int(wepchoice) - 1], enemy)
+        elif choice == "2":
+            potchoice = input("What potion would you like to use? ").strip().lower()
+#            print(self.inventory.items[int(potchoice) - 1].name)
+            self.potion_use(self.inventory.items[int(potchoice) - 1])
+        else:
+            print("You messed up so you get your turn skipped.")
 
     def xpgain(self, mult):
         gain = random.randint(1,3)
@@ -109,23 +135,24 @@ class Entity:
             print(f"You found {addition.name}: \n - {addition.damage} damage \n - {addition.durability} durability \n - {addition.rarity} \n - Special Ability: {addition.special} ")
             decision = input("Do you want to add the weapon to inventory? ").strip().lower()
             if decision == "yes":
-                self.inventory.items.append(addition)
+                self.add_weapon_to_inventory(addition)
                 print("Weapon added to inventory.")
             else:
                 print("Weapon not added to inventory.")
         elif roll <= 40:
             addition = random.choice(potlist)
-            if addition == "Potion of Healing":
-                decision = input("You have found a potion of healing(Heals you based on your level)! Would you like to add it to your inventory?").strip().lower()
+            addition = Item(addition)
+            if addition.name == "Potion of Healing":
+                decision = input("You have found a potion of healing(Heals you based on your level)! Would you like to add it to your inventory? ").strip().lower()
                 if decision == "yes":
-                    self.inventory.items.append(addition)
+                    self.add_weapon_to_inventory(addition)
                     print("Potion added to inventory.")
                 else:
                     print("Potion not added to inventory.")
-            if addition == "Potion of Strength":
-                decision = input("You have found a potion of healing(Heals you based on your level)! Would you like to add it to your inventory?").strip().lower()
+            if addition.name == "Potion of Strength":
+                decision = input("You have found a potion of strength(Permenantly makes you stronger)! Would you like to add it to your inventory? ").strip().lower()
                 if decision == "yes":
-                    self.inventory.items.append(addition)
+                    self.add_weapon_to_inventory(addition)
                     print("Potion added to inventory.")
                 else:
                     print("Potion not added to inventory.")
@@ -147,9 +174,9 @@ class Weapon:
             print(f"{self.name} broke!")
             inventory.remove(self)
 
-
-
-
+class Item:
+    def __init__(self, name):
+        self.name = name
 #class 3
 
 
@@ -163,17 +190,18 @@ class main():
 #    print(enemy.inventory.items[0].name)
 #   print(hero.inventory.items[0].name)
 
+
     print(roll)
     hero.encounter()
 
-    hero.inventory.display_inventory()
 
     #print(f"Behold your mighty hero!!! {hero.describe()}")
     #print(f"{enemy.describe()}")
-   
-    enemy.attack(hooves, hero)
-
-    hero.attack(kicking_boots, enemy)
+    while enemy.health > 0:
+        hero.choice(enemy)
+        if enemy.health <= 0:
+            break
+        enemy.attack(hooves, hero)
 
 
 
