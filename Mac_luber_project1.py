@@ -155,6 +155,7 @@ class Entity:
                     print("Potion added to inventory.")
                 else:
                     print("Potion not added to inventory.")
+        roll = random.randint(1,100)
 
 
 class Weapon:
@@ -183,9 +184,9 @@ class main():
     hero = Entity(20, 1, 0, "large", "Hero", 1)
     enemy = Entity(15, 1, 0, "tiny", "Goat", 1)
     kicking_boots = Weapon("Kicking Boots", 15, 10, "mythical", "roundhouse")
-    hooves = Weapon("Hooves", 1, 15, "common", "ram")
+    enemy_weapon = Weapon("Hooves", 1, 15, "common", "ram")
     hero.add_weapon_to_inventory(kicking_boots)
-    enemy.add_weapon_to_inventory(hooves)
+    enemy.add_weapon_to_inventory(enemy_weapon)
 #    print(enemy.inventory.items[0].name)
 #   print(hero.inventory.items[0].name)
 
@@ -196,11 +197,12 @@ class main():
 
     #print(f"Behold your mighty hero!!! {hero.describe()}")
     #print(f"{enemy.describe()}")
+
     while enemy.health > 0:
         hero.choice(enemy)
         if enemy.health <= 0:
             break
-        enemy.attack(hooves, hero)
+        enemy.attack(enemy_weapon, hero)
 
 
 
