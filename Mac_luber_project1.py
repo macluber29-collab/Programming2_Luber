@@ -120,7 +120,7 @@ class Entity:
             for i in self.inventory.items:
                 print(self.inventory.items.index(i)+1)
                 print(wepchoice)
-                if int(wepchoice) == int(self.inventory.items.index(i)):
+                if int(wepchoice) == int(self.inventory.items.index(i)+1):
                     self.attack(self.inventory.items[int(wepchoice) - 1], enemy)
         elif choice == "2":
             potchoice = input("What potion would you like to use? ").strip().lower()
