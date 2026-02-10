@@ -1,12 +1,58 @@
 import random
 import time
 
+dagger_art = r"""
+  / \
+  | |
+  | |
+  |.|
+  |.|
+  |:|
+  |:|
+`--8--'
+   8
+   O
+"""
+boots_art = r"""
+     ._......     
+     |X/.*| |     
+     |X/+ | |     
+     |X/* | |     
+____/     ; ;       
+\_____/|_/_/
+"""
+longsword_art = r"""
+     /\
+    // \
+    || |
+    || |
+    || |
+    || |
+    || |
+    || |
+ __ || | __
+/___||_|___\
+     ww
+     MM
+    _MM_
+   (&<>&)
+    ~~~~
+"""
+
+def roll():
+    roll = random.randint(1,100)
+    return roll
+
+roll = roll()
 
 rarlist = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"]
 
 speclist = ["Roundhouse", "Low Stab", "Spinjitzu"]
 weaponlist = ["Kicking Boots", "Dagger", "Longsword"]
 potlist = ["Potion of Healing", "Potion of Strength"]
+
+enemylist = ["Nubian Goat", "Zombie", "Skeleton"]
+
 
 roll = random.randint(1,100)
 
@@ -49,6 +95,8 @@ class Entity:
         self.strength = strength
         self.inventory = Inventory()
    
+#    def make_enemy(self):
+        
 
     def potion_use(self, potion):
         if potion in self.inventory.items:
@@ -69,17 +117,24 @@ class Entity:
         choice = input("What would you like to do: \n 1: Attack \n 2: Use Potion \n").strip().lower()
         if choice == "1":
             wepchoice = input("What weapon would you like to attack with? ").strip().lower()
-            self.attack(self.inventory.items[int(wepchoice) - 1], enemy)
+            for i in self.inventory.items:
+                print(self.inventory.items.index(i)+1)
+                print(wepchoice)
+                if int(wepchoice) == int(self.inventory.items.index(i)):
+                    self.attack(self.inventory.items[int(wepchoice) - 1], enemy)
         elif choice == "2":
             potchoice = input("What potion would you like to use? ").strip().lower()
 #            print(self.inventory.items[int(potchoice) - 1].name)
-            self.potion_use(self.inventory.items[int(potchoice) - 1])
+            for item in self.inventory.items:
+                if potchoice == item.name:
+                    self.potion_use(self.inventory.items[int(potchoice) - 1])
         else:
             print("You messed up so you get your turn skipped.")
 
     def xpgain(self, mult):
         gain = random.randint(1,3)
         gain = gain * ((mult/100)+2)
+        round(gain, 1)
         self.xp += gain
         requirement = self.level * 2
         while self.xp >= requirement:
@@ -94,7 +149,7 @@ class Entity:
         self.health -= amount
         print(f"{self.race} now has {self.health} hp.")
         if self.health <= 0:
-            return "{self.race} died!"
+            return f"{self.race} died!"
     
 
     def describe(self):
@@ -131,6 +186,12 @@ class Entity:
         if roll <= 20:
             addition = random.choice(weaponlist)
             addition = Weapon(addition, self.level * 2, roll, random.choice(rarlist), speclist[weaponlist.index(addition)])
+            if addition.name == "Longsword":
+                print(longsword_art)
+            elif addition.name == "Kicking Boots":
+                print(boots_art)
+            elif addition.name == "Dagger":
+                print(dagger_art)
             print(f"You found {addition.name}: \n - {addition.damage} damage \n - {addition.durability} durability \n - {addition.rarity} \n - Special Ability: {addition.special} ")
             decision = input("Do you want to add the weapon to inventory? ").strip().lower()
             if decision == "yes":
@@ -155,7 +216,6 @@ class Entity:
                     print("Potion added to inventory.")
                 else:
                     print("Potion not added to inventory.")
-        roll = random.randint(1,100)
 
 
 class Weapon:
@@ -183,7 +243,7 @@ class Item:
 class main():
     hero = Entity(20, 1, 0, "large", "Hero", 1)
     enemy = Entity(15, 1, 0, "tiny", "Goat", 1)
-    kicking_boots = Weapon("Kicking Boots", 15, 10, "mythical", "roundhouse")
+    kicking_boots = Weapon("Kicking Boots", 5, 10, "mythical", "roundhouse")
     enemy_weapon = Weapon("Hooves", 1, 15, "common", "ram")
     hero.add_weapon_to_inventory(kicking_boots)
     enemy.add_weapon_to_inventory(enemy_weapon)
