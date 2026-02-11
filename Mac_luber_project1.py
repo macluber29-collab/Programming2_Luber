@@ -66,17 +66,18 @@ weaponlist = ["Kicking Boots", "Dagger", "Longsword"]
 potlist = ["Potion of Healing", "Potion of Strength"]
 
 enemylist = ["Nubian Goat", "Zombie", "Skeleton"]
+enemy_weaponlist = ["Hooves", "Iron Shovel", "Bow and Arrow"]
 
 
 roll = random.randint(1,100)
 
 #class 1
 class Inventory:
-    def __init__(self,items=None):
+    def __init__(self,weight=0,items=None):
         if items is None:
             items = []
             self.items = items
-    
+            self.weight = weight
     def add_item(self,item):
         self.items.append(item)
     
@@ -110,7 +111,34 @@ class Entity:
         self.inventory = Inventory()
    
 #    def make_enemy(self):
-        
+    def checkweight(self):
+        weight = 0
+        limit = self.level * self.strength
+        if limit < 20:
+            limit = 20
+        if self.inventory.items:
+            counter = 0
+            print("Inventory: ")
+            for item in self.inventory.items:
+                counter += 1
+                weight += item.weight
+                if item.name in weaponlist:
+                    print(f"{str(counter)}. {item.name}: {item.damage} damage, {item.durability} durability, {item.weight} weight")
+                if item.name in potlist:
+                    print(f"{str(counter)}. {item.name}, {item.weight} weight")
+        else:
+            print(f"Inventory is empty.")
+        print(f"Total weight: {weight}")
+        while weight > limit:
+            print(f"You have exceeded your {limit} kg weight limit!")
+            choice = input(f"What item would you like to drop? ").strip().title()
+            for item in self.inventory.items:
+                print(self.inventory.items)
+                if choice == self.inventory.items.index(item):
+                    self.remove_weapon_from_inventory(item)
+                    print(f"You dropped {choice}.")
+        return weight
+
 
     def potion_use(self, potion):
         if potion in self.inventory.items:
@@ -174,7 +202,7 @@ class Entity:
         if weapon in self.inventory.items:
             print(f"{self.race} attacks {target.race} with {weapon.name}.")
 
-            total_damage = weapon.damage + self.strength
+            total_damage = weapon.damage + self.strength*weapon.damage*.1
 
             target.take_damage(total_damage)
 
@@ -199,7 +227,7 @@ class Entity:
     def encounter(self):
         if roll <= 20:
             addition = random.choice(weaponlist)
-            addition = Weapon(addition, self.level * 2, roll, random.choice(rarlist), speclist[weaponlist.index(addition)])
+            addition = Weapon(addition, self.level * 2, roll, random.choice(rarlist), self.level * 2 * 0.5, speclist[weaponlist.index(addition)])
             if addition.name == "Longsword":
                 print(longsword_art)
             elif addition.name == "Kicking Boots":
@@ -215,7 +243,7 @@ class Entity:
                 print("Weapon not added to inventory.")
         elif roll <= 40:
             addition = random.choice(potlist)
-            addition = Item(addition)
+            addition = Item(addition, 4)
             print(potion_art)
             if addition.name == "Potion of Healing":
                 decision = input("You have found a potion of healing(Heals you based on your level)! Would you like to add it to your inventory? ").strip().lower()
@@ -234,12 +262,13 @@ class Entity:
 
 
 class Weapon:
-    def __init__(self, name, damage, durability, rarity, special):
+    def __init__(self, name, damage, durability, rarity, weight, special):
         self.name = name
         self.damage = damage
         self.durability = durability
         self.rarity = rarity
         self.special = special
+        self.weight = weight
 
 
     def degrade(self, inventory):
@@ -250,25 +279,27 @@ class Weapon:
             inventory.remove(self)
 
 class Item:
-    def __init__(self, name):
+    def __init__(self, name, weight):
         self.name = name
+        self.weight = weight
 #class 3
 
 
 class main():
     hero = Entity(20, 1, 0, "large", "Hero", 1)
-    enemy = Entity(15, 1, 0, "tiny", "Goat", 1)
-    kicking_boots = Weapon("Kicking Boots", 5, 10, "mythical", "roundhouse")
-    enemy_weapon = Weapon("Hooves", 1, 15, "common", "ram")
+    enemy = Entity(15, 1, 0, "tiny", random.choice(enemylist), 1)
+    kicking_boots = Weapon("Kicking Boots", 5, 10, "mythical", 10000, "roundhouse")
+    enemy_weapon = Weapon(enemy_weaponlist[enemylist.index(enemy.race)], 1, 15, "common", 3, "ram")
     hero.add_weapon_to_inventory(kicking_boots)
     enemy.add_weapon_to_inventory(enemy_weapon)
 #    print(enemy.inventory.items[0].name)
-#   print(hero.inventory.items[0].name)
+#    print(hero.inventory.items[0].name)
 
 
     print(roll)
     hero.encounter()
 
+    hero.checkweight()
 
     #print(f"Behold your mighty hero!!! {hero.describe()}")
     #print(f"{enemy.describe()}")
