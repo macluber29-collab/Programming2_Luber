@@ -38,7 +38,21 @@ longsword_art = r"""
    (&<>&)
     ~~~~
 """
-
+potion_art = r"""  
+   _____
+  `.___,'
+   (___)
+   <   >
+    ) (
+   /`-.\
+  /     \
+ / _    _\
+:,' `-.' `:
+|         |
+:         ;
+ \       /
+  `.___.' 
+"""
 def roll():
     roll = random.randint(1,100)
     return roll
@@ -202,6 +216,7 @@ class Entity:
         elif roll <= 40:
             addition = random.choice(potlist)
             addition = Item(addition)
+            print(potion_art)
             if addition.name == "Potion of Healing":
                 decision = input("You have found a potion of healing(Heals you based on your level)! Would you like to add it to your inventory? ").strip().lower()
                 if decision == "yes":
