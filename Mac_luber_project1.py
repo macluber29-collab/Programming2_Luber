@@ -133,10 +133,13 @@ class Entity:
             print(f"You have exceeded your {limit} kg weight limit!")
             choice = input(f"What item would you like to drop? ").strip().title()
             for item in self.inventory.items:
-                print(self.inventory.items)
-                if choice == self.inventory.items.index(item):
+                #print(self.inventory.items)
+                if int(choice) - 1 == self.inventory.items.index(item):
                     self.remove_weapon_from_inventory(item)
-                    print(f"You dropped {choice}.")
+                    print(f"You dropped {item.name}.")
+            print(weight)
+            for item in self.inventory.items:
+                weight += item.weight
         return weight
 
 
@@ -155,7 +158,7 @@ class Entity:
 
     def choice(self, enemy):
         #Add more
-        self.inventory.display_inventory()
+        #self.inventory.display_inventory()
         choice = input("What would you like to do: \n 1: Attack \n 2: Use Potion \n").strip().lower()
         if choice == "1":
             wepchoice = input("What weapon would you like to attack with? ").strip().lower()
@@ -217,17 +220,15 @@ class Entity:
 
     def add_weapon_to_inventory(self,weapon):
         self.inventory.add_item(weapon)
-        print(f"{self.race} equips {weapon.name}.")
 
     def remove_weapon_from_inventory(self,weapon):
         self.inventory.remove_item(weapon)
-        print(f"{self.race} unequips {weapon.name}.")
 
 
     def encounter(self):
-        if roll <= 20:
+        if roll <= 100:
             addition = random.choice(weaponlist)
-            addition = Weapon(addition, self.level * 2, roll, random.choice(rarlist), self.level * 2 * 0.5, speclist[weaponlist.index(addition)])
+            addition = Weapon(addition, self.level * 2, roll, random.choice(rarlist), self.level * 2 * 10, speclist[weaponlist.index(addition)])
             if addition.name == "Longsword":
                 print(longsword_art)
             elif addition.name == "Kicking Boots":
@@ -288,7 +289,7 @@ class Item:
 class main():
     hero = Entity(20, 1, 0, "large", "Hero", 1)
     enemy = Entity(15, 1, 0, "tiny", random.choice(enemylist), 1)
-    kicking_boots = Weapon("Kicking Boots", 5, 10, "mythical", 10000, "roundhouse")
+    kicking_boots = Weapon("Kicking Boots", 5, 10, "mythical", 15, "roundhouse")
     enemy_weapon = Weapon(enemy_weaponlist[enemylist.index(enemy.race)], 1, 15, "common", 3, "ram")
     hero.add_weapon_to_inventory(kicking_boots)
     enemy.add_weapon_to_inventory(enemy_weapon)
@@ -296,7 +297,7 @@ class main():
 #    print(hero.inventory.items[0].name)
 
 
-    print(roll)
+    #print(roll)
     hero.encounter()
 
     hero.checkweight()
