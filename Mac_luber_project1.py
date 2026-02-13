@@ -137,14 +137,15 @@ class Entity:
                 if int(choice) - 1 == self.inventory.items.index(item):
                     self.remove_weapon_from_inventory(item)
                     print(f"You dropped {item.name}.")
-            print(weight)
             for item in self.inventory.items:
+                weight = 0
                 weight += item.weight
         return weight
 
 
     def potion_use(self, potion):
         if potion in self.inventory.items:
+#            print(potion.name)
             if potion.name == "Potion of Healing":
                 self.health += self.level * 3/2
                 print(f"You used potion of healing. Hero now has {self.health} hp.")
@@ -168,10 +169,13 @@ class Entity:
                 if int(wepchoice) == int(self.inventory.items.index(i)+1):
                     self.attack(self.inventory.items[int(wepchoice) - 1], enemy)
         elif choice == "2":
+#            print("Yes")
             potchoice = input("What potion would you like to use? ").strip().lower()
 #            print(self.inventory.items[int(potchoice) - 1].name)
             for item in self.inventory.items:
-                if potchoice == item.name:
+#               print(item.name)
+                if self.inventory.items[int(potchoice) - 1].name == item.name:
+#                   print("YES")
                     self.potion_use(self.inventory.items[int(potchoice) - 1])
         else:
             print("You messed up so you get your turn skipped.")
@@ -242,7 +246,8 @@ class Entity:
                 print("Weapon added to inventory.")
             else:
                 print("Weapon not added to inventory.")
-        elif roll <= 40:
+###################################               
+        if roll <= 100:
             addition = random.choice(potlist)
             addition = Item(addition, 4)
             print(potion_art)
@@ -289,7 +294,7 @@ class Item:
 class main():
     hero = Entity(20, 1, 0, "large", "Hero", 1)
     enemy = Entity(15, 1, 0, "tiny", random.choice(enemylist), 1)
-    kicking_boots = Weapon("Kicking Boots", 5, 10, "mythical", 15, "roundhouse")
+    kicking_boots = Weapon("Kicking Boots", 1000, 10, "mythical", 15, "roundhouse")
     enemy_weapon = Weapon(enemy_weaponlist[enemylist.index(enemy.race)], 1, 15, "common", 3, "ram")
     hero.add_weapon_to_inventory(kicking_boots)
     enemy.add_weapon_to_inventory(enemy_weapon)
@@ -303,8 +308,8 @@ class main():
     hero.checkweight()
 
     #print(f"Behold your mighty hero!!! {hero.describe()}")
-    #print(f"{enemy.describe()}")
-
+    print(f"{enemy.describe()}")
+    hero.checkweight()
     while enemy.health > 0:
         hero.choice(enemy)
         if enemy.health <= 0:
