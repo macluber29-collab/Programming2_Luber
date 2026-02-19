@@ -292,7 +292,7 @@ class Item:
 
 
 class main():
-    hero = Entity(20, 1, 0, "large", "Hero", 1)
+    hero = Entity(20, 1, 0, "large", "You", 1)
     enemy = Entity(15, 1, 0, "tiny", random.choice(enemylist), 1)
     kicking_boots = Weapon("Kicking Boots", 1000, 10, "mythical", 15, "roundhouse")
     enemy_weapon = Weapon(enemy_weaponlist[enemylist.index(enemy.race)], 1, 15, "common", 3, "ram")
@@ -301,13 +301,17 @@ class main():
 #    print(enemy.inventory.items[0].name)
 #    print(hero.inventory.items[0].name)
 
-
+    print("You wake up to find yourself in a cavern, only illuminated by some strage fungi above you.")
+    time.sleep(3)
+    print("You stand up and walk through the dimly lit space.")
     #print(roll)
     hero.encounter()
-
+    time.sleep(3)
+    print("You notice a backpack on your back.")
+    time.sleep(2)
     hero.checkweight()
 
-    #print(f"Behold your mighty hero!!! {hero.describe()}")
+
     print(f"{enemy.describe()}")
     hero.checkweight()
     while enemy.health > 0:
