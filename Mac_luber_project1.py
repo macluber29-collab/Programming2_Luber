@@ -62,6 +62,7 @@ sizelist = ["Miniscule" "Tiny", "Average", "Large", "Huge"]
 rarlist = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"]
 
 speclist = ["Roundhouse", "Low Stab", "Spinjitzu"]
+enemy_speclist = ["Back Kick", "Heavy Slam", "Triple Shot"]
 weaponlist = ["Kicking Boots", "Dagger", "Longsword"]
 potlist = ["Potion of Healing", "Potion of Strength"]
 
@@ -73,11 +74,16 @@ roll = random.randint(1,100)
 
 #class 1
 class Inventory:
-    def __init__(self,weight=0,items=None):
+    def __init__(self,weight=0,items=None, gold=None):
         if items is None:
             items = []
             self.items = items
             self.weight = weight
+            self.gold = gold
+
+    def add_gold(self,amt):
+        self.gold += amt
+
     def add_item(self,item):
         self.items.append(item)
     
@@ -87,6 +93,9 @@ class Inventory:
             print(f"Removed {item.name} from inventory.")
         else:
             print(f"{item.name} not found in inventory.")
+    
+    def remove_gold(self, amt):
+        self.gold -= amt
 
     def display_inventory(self):
         if self.items:
@@ -100,6 +109,7 @@ class Inventory:
                     print(f"{str(counter)}. {item.name}")
         else:
             print(f"Inventory is empty.")
+        print()
 class Entity:
     def __init__(self, health, level, xp, size, race, strength):
         self.health = health
@@ -110,12 +120,17 @@ class Entity:
         self.strength = strength
         self.inventory = Inventory()
    
-    def make_enemy(self):
-        enemy = Entity(10 + (self.level * self.level * 4), 1, 0, random.choice(sizelist), random.choice(enemylist), 1)
-        return enemy
-    def make_enemy_weapon(self):
-        
+    def shop(self):
+        print()
 
+    def make_enemy(self):
+        enemy = Entity(10 + (self.level * self.level * 4), self.level, 0, random.choice(sizelist), random.choice(enemylist), 1)
+        return enemy
+    
+    def make_enemy_weapon(self, enemy):
+        enemy_weapon = Weapon(enemy_weaponlist[enemylist.index(enemy.race)], enemy.health/2, 41, random.choice(rarlist), 1, enemy_speclist[enemylist.index(enemy.race)])
+        return enemy_weapon
+    
     def checkweight(self):
         weight = 0
         limit = self.level * self.strength
@@ -165,7 +180,7 @@ class Entity:
     def choice(self, enemy):
         #Add more
         #self.inventory.display_inventory()
-        choice = input("What would you like to do: \n 1: Attack \n 2: Use Potion \n").strip().lower()
+        choice = input("What would you like to do: \n 1: Attack \n 2: Use Potion \n 3: View Inventory \n ").strip().lower()
         if choice == "1":
             wepchoice = input("What weapon would you like to attack with? ").strip().lower()
             for i in self.inventory.items:
@@ -182,11 +197,15 @@ class Entity:
                 if self.inventory.items[int(potchoice) - 1].name == item.name:
 #                   print("YES")
                     self.potion_use(self.inventory.items[int(potchoice) - 1])
+        elif choice == "3":
+            self.inventory.display_inventory()
+            self.choice(enemy)
         else:
             print("You messed up so you get your turn skipped.")
 
     def xpgain(self, mult):
         gain = random.randint(1,3)
+        self.add_gold_to_inventory(gain/3*self.level)
         gain = gain * ((mult/100)+2)
         round(gain, 1)
         self.xp += gain
@@ -229,15 +248,21 @@ class Entity:
 
     def add_weapon_to_inventory(self,weapon):
         self.inventory.add_item(weapon)
+    
+    def add_gold_to_inventory(self,amt):
+        self.inventory.add_gold(amt)
 
     def remove_weapon_from_inventory(self,weapon):
         self.inventory.remove_item(weapon)
+    
+    def remove_gold_from_inventory(self, amt):
+        self.inventory.remove_gold(amt)
 
 
     def encounter(self):
-        if roll <= 100:
+        if roll <= 20:
             addition = random.choice(weaponlist)
-            addition = Weapon(addition, self.level * 2, roll, random.choice(rarlist), self.level * 2 * 10, speclist[weaponlist.index(addition)])
+            addition = Weapon(addition, self.level*self.level*random.randint(10, 30) * .1, roll, random.choice(rarlist), self.level * 2 * 10, speclist[weaponlist.index(addition)])
             if addition.name == "Longsword":
                 print(longsword_art)
             elif addition.name == "Kicking Boots":
@@ -252,7 +277,7 @@ class Entity:
             else:
                 print("Weapon not added to inventory.")
 ###################################               
-        if roll <= 100:
+        if roll <= 40:
             addition = random.choice(potlist)
             addition = Item(addition, 4)
             print(potion_art)
@@ -298,9 +323,9 @@ class Item:
 
 class main():
     hero = Entity(20, 1, 0, "large", "You", 1)
-    enemy = Entity(15, 1, 0, "tiny", random.choice(enemylist), 1)
-    kicking_boots = Weapon("Kicking Boots", 1000, 10, "mythical", 15, "roundhouse")
-    enemy_weapon = Weapon(enemy_weaponlist[enemylist.index(enemy.race)], 1, 15, "common", 3, "ram")
+    enemy = hero.make_enemy()
+    kicking_boots = Weapon("Kicking Boots", 5, 10, "mythical", 15, "roundhouse")
+    enemy_weapon = hero.make_enemy_weapon(enemy)
     hero.add_weapon_to_inventory(kicking_boots)
     enemy.add_weapon_to_inventory(enemy_weapon)
 #    print(enemy.inventory.items[0].name)
@@ -311,16 +336,21 @@ class main():
     print("You stand up and walk through the dimly lit space.")
     #print(roll)
     time.sleep(2)
+    print("You pick up a heavy backpack that was sitting on the wall.")
+    time.sleep(2)
+    print("Next to the backpack you find 3 gold.")
     hero.encounter()
     time.sleep(3)
-    print("You notice a backpack on your back.")
-    time.sleep(2)
     hero.checkweight()
     time.sleep(6)
 
 
     print(f"{enemy.describe()}")
+    time.sleep(3)
+
     hero.checkweight()
+    time.sleep(2)
+
     while enemy.health > 0:
         hero.choice(enemy)
         if enemy.health <= 0:
