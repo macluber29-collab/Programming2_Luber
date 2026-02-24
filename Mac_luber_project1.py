@@ -58,7 +58,7 @@ def roll():
     return roll
 
 roll = roll()
-
+sizelist = ["Miniscule" "Tiny", "Average", "Large", "Huge"]
 rarlist = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"]
 
 speclist = ["Roundhouse", "Low Stab", "Spinjitzu"]
@@ -110,12 +110,17 @@ class Entity:
         self.strength = strength
         self.inventory = Inventory()
    
-#    def make_enemy(self):
+    def make_enemy(self):
+        enemy = Entity(10 + (self.level * self.level * 4), 1, 0, random.choice(sizelist), random.choice(enemylist), 1)
+        return enemy
+    def make_enemy_weapon(self):
+        
+
     def checkweight(self):
         weight = 0
         limit = self.level * self.strength
-        if limit < 20:
-            limit = 20
+        if limit < 40:
+            limit = 40
         if self.inventory.items:
             counter = 0
             print("Inventory: ")
@@ -305,11 +310,13 @@ class main():
     time.sleep(3)
     print("You stand up and walk through the dimly lit space.")
     #print(roll)
+    time.sleep(2)
     hero.encounter()
     time.sleep(3)
     print("You notice a backpack on your back.")
     time.sleep(2)
     hero.checkweight()
+    time.sleep(6)
 
 
     print(f"{enemy.describe()}")
